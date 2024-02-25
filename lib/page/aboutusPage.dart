@@ -2,14 +2,21 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class AboutmePage extends StatefulWidget {
-  const AboutmePage({Key? key}) : super(key: key);
+// Model
+import 'package:khanabnak_water/model/dropdownNavModel.dart';
+
+// Data
+import 'package:khanabnak_water/data/highlightPro.dart';
+import '../data/dropdownNav.dart';
+
+class AboutusPage extends StatefulWidget {
+  const AboutusPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _AboutmePageState();
+  State<StatefulWidget> createState() => _AboutusPageState();
 }
 
-class _AboutmePageState extends State<AboutmePage> {
+class _AboutusPageState extends State<AboutusPage> {
   final List<String> topImagePaths = [
     "assets/images/homepage/homepage_slide1.jpg",
     "assets/images/homepage/homepage_slide2.jpg",
@@ -51,7 +58,7 @@ class _AboutmePageState extends State<AboutmePage> {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle aboutWhySubtextStyle = TextStyle(
+    const TextStyle aboutusSubtextStyle = TextStyle(
       color: Colors.white,
       fontSize: 14,
       fontFamily: 'Kanit',
@@ -75,12 +82,9 @@ class _AboutmePageState extends State<AboutmePage> {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const MyHomePage(),
-                    //   ),
-                    // );
+                    Navigator.of(context)
+                        .popUntil((route) => route.settings.name == '/');
+                    Navigator.pushNamed(context, mainRounte);
                   },
                   child: Image.asset(
                     "assets/images/homepage/logo.png",
@@ -102,18 +106,28 @@ class _AboutmePageState extends State<AboutmePage> {
               onTap: () {},
               child: PopupMenuButton<String>(
                 itemBuilder: (BuildContext context) {
-                  return ['หน้าแรก', 'เกี่ยวกับเรา'].map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
+                  return dropdownNavList.map(
+                    (DropdownNav item) {
+                      return PopupMenuItem<String>(
+                        value: item.page,
+                        child: Text(item.page),
+                      );
+                    },
+                  ).toList();
                 },
                 onSelected: (String choice) {
-                  if (choice == 'หน้าแรก') {
-                    Navigator.pushNamed(context, '/detail');
-                  } else if (choice == 'เกี่ยวกับเรา') {
-                    Navigator.pushReplacementNamed(context, '/aboutme');
+                  DropdownNav selectedNav =
+                      dropdownNavList.firstWhere((nav) => nav.page == choice);
+                  String selectedRoute = selectedNav.rounte;
+                  if (ModalRoute.of(context)!.settings.name == selectedRoute) {
+                    Navigator.pushReplacementNamed(context, selectedRoute);
+                  } else if (selectedRoute == mainRounte) {
+                    Navigator.of(context)
+                        .popUntil((route) => route.settings.name == '/');
+                    Navigator.pushNamed(context, selectedRoute);
+                  } else {
+                    Navigator.pushNamedAndRemoveUntil(context, selectedRoute,
+                        ModalRoute.withName(mainRounte));
                   }
                 },
                 child: const Icon(
@@ -210,7 +224,7 @@ class _AboutmePageState extends State<AboutmePage> {
                 ),
                 subtitle: const Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 5),
                       child: Text(
@@ -249,7 +263,7 @@ class _AboutmePageState extends State<AboutmePage> {
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Stack(
                 alignment: Alignment.center,
-                children: [
+                children: <Widget>[
                   ColoredBox(
                     color: Color.fromARGB(255, 65, 105, 225),
                     child: SizedBox(
@@ -259,7 +273,7 @@ class _AboutmePageState extends State<AboutmePage> {
                         contentPadding: EdgeInsets.fromLTRB(30, 10, 30, 15),
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Align(
                               alignment: Alignment.center,
                               child: Text(
@@ -296,7 +310,7 @@ class _AboutmePageState extends State<AboutmePage> {
                               padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.baseline,
@@ -308,7 +322,7 @@ class _AboutmePageState extends State<AboutmePage> {
                                       Expanded(
                                         child: Text(
                                           "ตรวจวัดและเฝ้าระวังคุณภาพน้ำของคุณ ในรูปแบบออนไลน์",
-                                          style: aboutWhySubtextStyle,
+                                          style: aboutusSubtextStyle,
                                         ),
                                       ),
                                     ],
@@ -318,14 +332,14 @@ class _AboutmePageState extends State<AboutmePage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.baseline,
                                     textBaseline: TextBaseline.alphabetic,
-                                    children: [
+                                    children: <Widget>[
                                       Icon(Icons.circle,
                                           size: 6, color: Colors.white),
                                       SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
                                           "ตรวจสอบคุณภาพน้ำของคุณ ได้ง่าย ผ่านเว็ปเบราเซอร์ และหรือแอพพลิเคชั่น",
-                                          style: aboutWhySubtextStyle,
+                                          style: aboutusSubtextStyle,
                                         ),
                                       ),
                                     ],
@@ -335,14 +349,14 @@ class _AboutmePageState extends State<AboutmePage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.baseline,
                                     textBaseline: TextBaseline.alphabetic,
-                                    children: [
+                                    children: <Widget>[
                                       Icon(Icons.circle,
                                           size: 6, color: Colors.white),
                                       SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
                                           "เลือกติดตั้งหน่วยวัดคุณภาพน้ำในแต่ละด้านที่ต้องการ ในงบประมาณที่ควบคุมได้",
-                                          style: aboutWhySubtextStyle,
+                                          style: aboutusSubtextStyle,
                                         ),
                                       ),
                                     ],
@@ -352,14 +366,14 @@ class _AboutmePageState extends State<AboutmePage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.baseline,
                                     textBaseline: TextBaseline.alphabetic,
-                                    children: [
+                                    children: <Widget>[
                                       Icon(Icons.circle,
                                           size: 6, color: Colors.white),
                                       SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
                                           "รองรับการใช้งานหลากหลายโครงการ สถานีตรวจวัด (จุดติดตั้ง) และ อุปกรณ์ตรวจวัดคุณภาพน้ำ พร้อมๆกัน",
-                                          style: aboutWhySubtextStyle,
+                                          style: aboutusSubtextStyle,
                                         ),
                                       ),
                                     ],
@@ -376,7 +390,7 @@ class _AboutmePageState extends State<AboutmePage> {
                                       Expanded(
                                         child: Text(
                                           "สะดวก ปลอดภัย เลือกการเปิดเผยข้อมูลคุณภาพน้ำของคุณ ให้เป็น สาธารณะ หรือ ส่วนบุคคล ได้",
-                                          style: aboutWhySubtextStyle,
+                                          style: aboutusSubtextStyle,
                                         ),
                                       ),
                                     ],
@@ -426,119 +440,95 @@ class _AboutmePageState extends State<AboutmePage> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 25),
-              child: Column(
-                children: [
-                  Image(
-                    image:
-                        AssetImage("assets/images/homepage/icon_quality.png"),
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: highlightProList.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 25),
+                  child: Column(
+                    children: [
+                      Image(
+                        image: AssetImage(
+                          highlightProList[index].image,
+                        ),
+                        height: 50,
+                        width: 50,
+                        fit: BoxFit.cover,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
+                        child: Text(
+                          highlightProList[index].subtitle,
+                          style: bottomContainertextStyle,
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(30, 15, 30, 0),
-                    child: Text(
-                      "แสดงผลคุณภาพน้ำของคุณ ในรูปแบบ Real-Time",
-                      style: bottomContainertextStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 25),
-              child: Column(
-                children: [
-                  Image(
-                    image: AssetImage("assets/images/homepage/icon_graph.png"),
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(30, 15, 30, 0),
-                    child: Text(
-                      "ข้อมูลย้อนหลัง ในรูปแบบกราฟและตารางข้อมูล เพื่อดูแนวโน้มคุณภาพน้ำของคุณ",
-                      style: bottomContainertextStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 25),
-              child: Column(
-                children: [
-                  Image(
-                    image: AssetImage("assets/images/homepage/icon_warn.png"),
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(30, 15, 30, 0),
-                    child: Text(
-                      "แจ้งเตือนเมื่อค่าคุณภาพน้ำแต่ละด้านสูงหรือต่ำกว่าค่าที่กำหนด และแจ้งเตือนเมื่อถึงเวลากำหนดการบำรุงรักษา",
-                      style: bottomContainertextStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 25),
-              child: Column(children: [
-                CarouselSlider(
-                  options: CarouselOptions(
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    viewportFraction: 1.0,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _currentImageIndex = index;
-                      });
-                    },
+              child: Column(
+                children: <Widget>[
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      viewportFraction: 1.0,
+                      onPageChanged: (index, reason) {
+                        setState(
+                          () {
+                            _currentImageIndex = index;
+                          },
+                        );
+                      },
+                    ),
+                    items: bottomImagePaths.map(
+                      (imagePath) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              width: double.infinity,
+                              child: Image.asset(
+                                imagePath,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ).toList(),
                   ),
-                  items: bottomImagePaths.map((imagePath) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return SizedBox(
-                          width: double.infinity,
-                          child: Image.asset(
-                            imagePath,
-                            fit: BoxFit.cover,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: bottomImagePaths.asMap().entries.map(
+                      (entry) {
+                        int index = entry.key;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4.0,
+                            vertical: 15,
+                          ),
+                          child: Container(
+                            width: 8.0,
+                            height: 8.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _currentImageIndex == index
+                                  ? const Color.fromARGB(255, 148, 148, 148)
+                                  : const Color.fromARGB(255, 214, 214, 214),
+                            ),
                           ),
                         );
                       },
-                    );
-                  }).toList(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: bottomImagePaths.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 4.0, vertical: 15),
-                      child: Container(
-                        width: 8.0,
-                        height: 8.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentImageIndex == index
-                              ? const Color.fromARGB(255, 148, 148, 148)
-                              : const Color.fromARGB(255, 214, 214, 214),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                )
-              ]),
+                    ).toList(),
+                  )
+                ],
+              ),
             )
           ],
         ),

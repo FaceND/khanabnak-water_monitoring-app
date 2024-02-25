@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 import 'page/welcomePage.dart';
 import 'page/detailPage.dart';
 import 'page/aboutusPage.dart';
+import 'page/manualPage.dart';
 
-void main() {
+// Service
+import '../service/storageService.dart';
+
+void main() async {
+  await clearStorage();
   runApp(const MyApp());
 }
 
@@ -20,7 +25,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/welcome': (context) => const WelcomePage(),
         '/detail': (context) => const DetailPage(),
-        '/aboutme': (context) => const AboutmePage(),
+        '/aboutus': (context) => const AboutusPage(),
+        '/manual': (context) => const ManualPage(),
       },
       debugShowCheckedModeBanner: false,
     );

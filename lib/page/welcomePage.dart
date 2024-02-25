@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
+// Date
+import 'package:khanabnak_water/data/dropdownNav.dart';
+
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -15,7 +18,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
-        children: [
+        children: <Widget>[
           ColorFiltered(
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.30),
@@ -42,7 +45,7 @@ class _WelcomePageState extends State<WelcomePage> {
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 Image.asset(
                   'assets/icons/sci_Ciclelogo.png',
                   width: 200,
@@ -85,7 +88,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   //   );
                   // },
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/detail');
+                    Navigator.pushReplacementNamed(context, mainRounte);
                   },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
