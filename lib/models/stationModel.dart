@@ -1,4 +1,4 @@
-class Detail {
+class StationDetail {
   final String title;
   double temp;
   double salinity;
@@ -9,7 +9,7 @@ class Detail {
   String imagePath;
   String url;
 
-  Detail({
+  StationDetail({
     required this.title,
     required this.temp,
     required this.salinity,
@@ -35,8 +35,8 @@ class Detail {
     };
   }
 
-  factory Detail.fromJson(Map<String, dynamic> json) {
-    return Detail(
+  factory StationDetail.fromJson(Map<String, dynamic> json) {
+    return StationDetail(
       title: json['title'],
       temp: json['temp'].toDouble(),
       salinity: json['salinity'].toDouble(),

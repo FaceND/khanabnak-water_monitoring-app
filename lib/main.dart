@@ -1,14 +1,14 @@
 // Module
 import 'package:flutter/material.dart';
 
-// Page
-import 'page/welcomePage.dart';
-import 'page/detailPage.dart';
-import 'page/aboutusPage.dart';
-import 'page/manualPage.dart';
+// // Page
+import 'pages/welcomePage.dart';
 
 // Service
-import '../service/storageService.dart';
+import 'services/storageService.dart';
+
+// Routing
+import 'routes/routing.service.dart';
 
 void main() async {
   await clearStorage();
@@ -21,12 +21,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/welcome', // Set the initial route to the welcome page
-      routes: {
-        '/welcome': (context) => const WelcomePage(),
-        '/detail': (context) => const DetailPage(),
-        '/aboutus': (context) => const AboutusPage(),
-        '/manual': (context) => const ManualPage(),
+      home: const WelcomePage(),
+      onGenerateRoute: (settings) {
+        try {
+          return generateRoute(settings);
+        } catch (_) {
+          return MaterialPageRoute(
+            builder: (context) => getErrorRoute().component(context, null),
+          );
+        }
       },
       debugShowCheckedModeBanner: false,
     );

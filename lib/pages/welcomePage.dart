@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 // Date
-import 'package:khanabnak_water/data/dropdownNav.dart';
+import '../routes/app.routing.dart';
+
+// Route
+import '../routes/routing.service.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -72,23 +75,26 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
                 const SizedBox(height: 40),
                 ElevatedButton(
-                  // onPressed: () {
-                  //   Navigator.pushReplacement(
-                  //     context,
-                  //     PageRouteBuilder(
-                  //       pageBuilder: (context, animation1, animation2) =>
-                  //           const DetailPage(),
-                  //       transitionsBuilder:
-                  //           (context, animation1, animation2, child) {
-                  //         return FadeTransition(
-                  //             opacity: animation1, child: child);
-                  //       },
-                  //       transitionDuration: const Duration(milliseconds: 725),
-                  //     ),
-                  //   );
-                  // },
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, mainRounte);
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) {
+                          final component = routes
+                              .firstWhere((route) => route.path == mainPath)
+                              .component;
+                          return component(context, null);
+                        },
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          return FadeTransition(
+                            opacity: animation1,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: const Duration(milliseconds: 725),
+                      ),
+                    );
                   },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(

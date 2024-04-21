@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class Manual {
   String title;
   Color color;
-  String url;
+  List <dynamic> column;
+  List <List<dynamic>> row;
 
   Manual({
     required this.title,
     required this.color,
-    required this.url,
+    required this.column,
+    required this.row
   });
 }

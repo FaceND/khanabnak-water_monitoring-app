@@ -1,13 +1,12 @@
 // Module
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
-// Model
-import 'package:khanabnak_water/model/dropdownNavModel.dart';
+import 'package:flutter/material.dart';
 
 // Data
-import 'package:khanabnak_water/data/highlightPro.dart';
-import '../data/dropdownNav.dart';
+import '../data/aboutus.dart';
+
+// Component
+import '../components/navbar.component.dart';
 
 class AboutusPage extends StatefulWidget {
   const AboutusPage({Key? key}) : super(key: key);
@@ -17,45 +16,7 @@ class AboutusPage extends StatefulWidget {
 }
 
 class _AboutusPageState extends State<AboutusPage> {
-  final List<String> topImagePaths = [
-    "assets/images/homepage/homepage_slide1.jpg",
-    "assets/images/homepage/homepage_slide2.jpg",
-    "assets/images/homepage/homepage_slide3.jpg",
-  ];
-
-  final List<String> bottomImagePaths = [
-    "assets/images/homepage/image_bottom1.jpg",
-    "assets/images/homepage/image_bottom2.jpg",
-    "assets/images/homepage/image_bottom3.jpg",
-    "assets/images/homepage/image_bottom4.jpg",
-    "assets/images/homepage/image_bottom5.jpg",
-    "assets/images/homepage/image_bottom6.jpg",
-    "assets/images/homepage/image_bottom7.jpg",
-    "assets/images/homepage/image_bottom8.jpg",
-    "assets/images/homepage/image_bottom9.jpg",
-    "assets/images/homepage/image_bottom10.jpg",
-  ];
-
-  final List<String> headcaptions = [
-    "Water",
-    "Water pollution",
-    "Water quality monitoring",
-  ];
-
-  final List<String> captions1 = [
-    "น้ำเป็นปัจจัยที่สำคัญของสิ่งมีชีวิต การเพิ่มของประชากร การขยายตัวของชุมชนเมือง และการพัฒนาทางด้านอุตสาหกรรม",
-    "มลพิษทางน้ำ คือ การปนเปื้อนของแหล่งน้ำ สาเหตุส่วนใหญ่เกิดจากการใช้ประโยชน์จากกิจกรรมต่างๆของมนุษย์",
-    "การตรวจสอบคุณภาพน้ำเป็นพื้นฐานของการจัดการน้ำอย่างยั่งยืน",
-  ];
-
-  final List<String> captions2 = [
-    "มีผลทำให้มีการใช้น้ำปริมาณมาก ได้ก่อให้เกิดปัญหาคุณภาพน้ำ และ แม่น้ำลำคลอง และชายฝั่งทะเล รวมถึงความเป็นอยู่ของมนุษย์",
-    "ทั้งน้ำทิ้งจากแหล่งชุมชน และโรงงานอุตสาหกรรม ทำให้คุณภาพของน้ำเปลี่ยนแปลงไปในทางที่เสื่อมโทรมลง ยังผลให้การใช้ประโยชน์จากน้ำนั้นไม่ได้",
-    "ให้ข้อมูลที่จำเป็น ซึ่งระบุลักษณะทางกายภาพ เคมี และหรือสถานะทางชีววิทยาของทรัพยากรน้ำ",
-  ];
-
   int _currentImageIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     const TextStyle aboutusSubtextStyle = TextStyle(
@@ -71,82 +32,17 @@ class _AboutusPageState extends State<AboutusPage> {
     );
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context)
-                        .popUntil((route) => route.settings.name == '/');
-                    Navigator.pushNamed(context, mainRounte);
-                  },
-                  child: Image.asset(
-                    "assets/images/homepage/logo.png",
-                    fit: BoxFit.cover,
-                    height: 37,
-                  ),
-                ),
-              ),
-            ),
-            const Text(
-              'SSRU - Water Monitoring',
-              style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black),
-            ),
-            const Spacer(), // Add space to push the Icon to the right
-            GestureDetector(
-              onTap: () {},
-              child: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) {
-                  return dropdownNavList.map(
-                    (DropdownNav item) {
-                      return PopupMenuItem<String>(
-                        value: item.page,
-                        child: Text(item.page),
-                      );
-                    },
-                  ).toList();
-                },
-                onSelected: (String choice) {
-                  DropdownNav selectedNav =
-                      dropdownNavList.firstWhere((nav) => nav.page == choice);
-                  String selectedRoute = selectedNav.rounte;
-                  if (ModalRoute.of(context)!.settings.name == selectedRoute) {
-                    Navigator.pushReplacementNamed(context, selectedRoute);
-                  } else if (selectedRoute == mainRounte) {
-                    Navigator.of(context)
-                        .popUntil((route) => route.settings.name == '/');
-                    Navigator.pushNamed(context, selectedRoute);
-                  } else {
-                    Navigator.pushNamedAndRemoveUntil(context, selectedRoute,
-                        ModalRoute.withName(mainRounte));
-                  }
-                },
-                child: const Icon(
-                  Icons.more_vert,
-                  size: 27,
-                  color: Color.fromARGB(255, 56, 56, 56),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: navbar(context),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             CarouselSlider.builder(
               itemCount: topImagePaths.length,
-              itemBuilder:
-                  (BuildContext context, int index, int pageViewIndex) {
+              itemBuilder: (
+                BuildContext context,
+                int index,
+                int pageViewIndex,
+              ) {
                 return Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
@@ -167,7 +63,7 @@ class _AboutusPageState extends State<AboutusPage> {
                       children: [
                         ListTile(
                           title: Text(
-                            headcaptions[index],
+                            headCaptions[index],
                             style: const TextStyle(
                               fontSize: 19,
                               fontWeight: FontWeight.bold,
@@ -179,7 +75,7 @@ class _AboutusPageState extends State<AboutusPage> {
                             children: [
                               Center(
                                 child: Text(
-                                  captions1[index],
+                                  subCaptions1[index],
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -190,7 +86,7 @@ class _AboutusPageState extends State<AboutusPage> {
                               ),
                               Center(
                                 child: Text(
-                                  captions2[index],
+                                  subCaptions2[index],
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -237,15 +133,6 @@ class _AboutusPageState extends State<AboutusPage> {
                         ),
                       ),
                     ),
-                    // Text(
-                    //   'Water quality in Khanabnak Sub-district, Pakphanang District, Nakhon Si Thammarat Province.',
-                    //   style: TextStyle(
-                    //     fontSize: 15,
-                    //     fontWeight: FontWeight.w400,
-                    //     color: Color.fromARGB(255, 108, 116, 125),
-                    //     fontFamily: 'Kanit',
-                    //   ),
-                    // ),
                     Text(
                       'โดย 4 สถานีตรวจวัด',
                       style: TextStyle(
@@ -267,8 +154,6 @@ class _AboutusPageState extends State<AboutusPage> {
                   ColoredBox(
                     color: Color.fromARGB(255, 65, 105, 225),
                     child: SizedBox(
-                      // width: double.infinity,
-                      // height: MediaQuery.of(context).size.height * .7 - kToolbarHeight + (MediaQuery.of(context).orientation
                       child: ListTile(
                         contentPadding: EdgeInsets.fromLTRB(30, 10, 30, 15),
                         title: Column(
@@ -333,9 +218,14 @@ class _AboutusPageState extends State<AboutusPage> {
                                         CrossAxisAlignment.baseline,
                                     textBaseline: TextBaseline.alphabetic,
                                     children: <Widget>[
-                                      Icon(Icons.circle,
-                                          size: 6, color: Colors.white),
-                                      SizedBox(width: 8),
+                                      Icon(
+                                        Icons.circle,
+                                        size: 6,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
                                       Expanded(
                                         child: Text(
                                           "ตรวจสอบคุณภาพน้ำของคุณ ได้ง่าย ผ่านเว็ปเบราเซอร์ และหรือแอพพลิเคชั่น",
@@ -383,10 +273,15 @@ class _AboutusPageState extends State<AboutusPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.baseline,
                                     textBaseline: TextBaseline.alphabetic,
-                                    children: [
-                                      Icon(Icons.circle,
-                                          size: 6, color: Colors.white),
-                                      SizedBox(width: 8),
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.circle,
+                                        size: 6,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
                                       Expanded(
                                         child: Text(
                                           "สะดวก ปลอดภัย เลือกการเปิดเผยข้อมูลคุณภาพน้ำของคุณ ให้เป็น สาธารณะ หรือ ส่วนบุคคล ได้",
@@ -442,7 +337,7 @@ class _AboutusPageState extends State<AboutusPage> {
             ),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: highlightProList.length,
+              itemCount: aboutUsProducts.length,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
@@ -451,7 +346,7 @@ class _AboutusPageState extends State<AboutusPage> {
                     children: [
                       Image(
                         image: AssetImage(
-                          highlightProList[index].image,
+                          aboutUsProducts[index].image!,
                         ),
                         height: 50,
                         width: 50,
@@ -460,7 +355,7 @@ class _AboutusPageState extends State<AboutusPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
                         child: Text(
-                          highlightProList[index].subtitle,
+                          aboutUsProducts[index].subtitle!,
                           style: bottomContainertextStyle,
                           textAlign: TextAlign.center,
                         ),
@@ -471,7 +366,9 @@ class _AboutusPageState extends State<AboutusPage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25),
+              padding: const EdgeInsets.symmetric(
+                vertical: 25,
+              ),
               child: Column(
                 children: <Widget>[
                   CarouselSlider(

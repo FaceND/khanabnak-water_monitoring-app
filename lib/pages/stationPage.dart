@@ -1,33 +1,35 @@
 // Module
-import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:skeleton_text/skeleton_text.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'dart:async';
 
 // Model
-import 'package:khanabnak_water/model/dropdownNavModel.dart';
-import 'package:khanabnak_water/model/detailModel.dart';
+import '../models/stationModel.dart';
 
 // Data
 import '../data/khanabnak.dart';
-import '../data/dropdownNav.dart';
 
 // Service
-import '../service/storageService.dart';
-import '../service/runUrlService.dart';
-import '../service/khanabnakService.dart';
+import '../services/khanabnakService.dart';
+import '../services/storageService.dart';
+import '../services/runUrlService.dart';
 
-class DetailPage extends StatefulWidget {
-  const DetailPage({super.key});
+// Component
+import '../components/navbar.component.dart';
+
+class StationPage extends StatefulWidget {
+  const StationPage({super.key});
 
   @override
-  State<DetailPage> createState() => _DetailPageState();
+  State<StationPage> createState() => _StationPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _StationPageState extends State<StationPage> {
   BuildContext? dialogContext;
-  late List<Detail> details;
+  late List<StationDetail> details;
   late Future<void> _dataFuture;
   late List<Map<String, dynamic>> detailsJson;
 
@@ -38,53 +40,33 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> fetchAndSaveData() async {
+    errorMessage = null;
     try {
-      details = await fetchKhanabnakDetails();
-      // await clearSharedPreferences();
-      errorMessage = null;
-      detailsJson = details.map((detail) => detail.toJson()).toList();
-      setItem('khanabnakDetail', jsonEncode(detailsJson));
-    } catch (e) {
+      details =
+          await getKhanabnakDetails().timeout(const Duration(seconds: 10));
+      List<dynamic> detailsJson =
+          details.map((detail) => detail.toJson()).toList();
+      String jsonEncodedDetails = jsonEncode(detailsJson);
+      setItem('khanabnakDetail', jsonEncodedDetails);
+    } on TimeoutException catch (_) {
+      details = khanabnakDetailList;
+    } on Exception catch (e) {
       setState(() {
-        errorMessage = '$e';
+        errorMessage = e.toString();
       });
     }
   }
 
   Future<void> loadData() async {
     String? getDataJson = await getItem('khanabnakDetail');
-    if (getDataJson != null) {
-      for (var detailJson
-          in List<Map<String, dynamic>>.from(jsonDecode(getDataJson))) {
-        var existingDetail = khanabnakDetailList.firstWhere(
-          (detail) => detail.title == detailJson['title'],
-          orElse: () => Detail(
-            title: detailJson['title'],
-            temp: 0.0,
-            salinity: 0.0,
-            electcon: 0,
-            oxygen: 0,
-            BOD: 0.0,
-            measuringEquipment: 0,
-            imagePath: '',
-            url: '',
-          ),
-        );
-        existingDetail.temp = detailJson['temp'].toDouble();
-        existingDetail.salinity = detailJson['salinity'].toDouble();
-        existingDetail.electcon = detailJson['electcon'];
-        existingDetail.oxygen = detailJson['oxygen'];
-        existingDetail.BOD = detailJson['BOD'].toDouble();
-        existingDetail.measuringEquipment = detailJson['measuringEquipment'];
-        existingDetail.imagePath = detailJson['imagePath'];
-        existingDetail.url = detailJson['url'];
-      }
+    if (getDataJson != null && getDataJson.toLowerCase() != 'null') {
+      List<dynamic> detailsJson = jsonDecode(getDataJson) as List<dynamic>;
+      fetchKhanabnakDetails(detailsJson);
       errorMessage = null;
-      setState(() {});
     } else {
       await fetchAndSaveData();
-      setState(() {});
     }
+    setState(() {});
   }
 
   // Define a variable to hold the error message
@@ -94,66 +76,12 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Material(
-                color: Colors.transparent,
-                child: Image.asset(
-                  "assets/images/homepage/logo.png",
-                  fit: BoxFit.cover,
-                  height: 37,
-                ),
-              ),
-            ),
-            const Text(
-              'SSRU - Water Monitoring',
-              style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black),
-            ),
-            const Spacer(), // Add space to push the Icon to the right
-            GestureDetector(
-              onTap: () {},
-              child: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) {
-                  return dropdownNavList.map((DropdownNav item) {
-                    return PopupMenuItem<String>(
-                      value: item.page,
-                      child: Text(item.page),
-                    );
-                  }).toList();
-                },
-                onSelected: (String choice) {
-                  DropdownNav selectedNav =
-                      dropdownNavList.firstWhere((nav) => nav.page == choice);
-                  String selectedRoute = selectedNav.rounte;
-                  if (ModalRoute.of(context)!.settings.name == selectedRoute) {
-                    Navigator.pushReplacementNamed(context, selectedRoute);
-                  } else {
-                    Navigator.pushNamed(context, selectedRoute);
-                  }
-                },
-                child: const Icon(
-                  Icons.more_vert,
-                  size: 27,
-                  color: Color.fromARGB(255, 56, 56, 56),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+      appBar: navbar(context),
       body: errorMessage != null
           ? Center(
               child: Builder(
                 builder: (context) {
-                  WidgetsBinding.instance!.addPostFrameCallback(
+                  WidgetsBinding.instance.addPostFrameCallback(
                     (_) {
                       showDialog(
                         context: context,
@@ -388,7 +316,6 @@ class _DetailPageState extends State<DetailPage> {
                                   shrinkWrap: true,
                                   physics:
                                       const NeverScrollableScrollPhysics(), // This disables scrolling for the ListView
-                                  // itemCount: khanabnakDetailList.length,
                                   itemCount: khanabnakDetailList.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
@@ -497,7 +424,8 @@ class _DetailPageState extends State<DetailPage> {
                                                           ),
                                                         ),
                                                         const SizedBox(
-                                                            height: 7),
+                                                          height: 7,
+                                                        ),
                                                         Row(
                                                           children: <Widget>[
                                                             Text(
