@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 
 // // Model
-import '../models/navbarModel.dart';
-
-// Data
-import '../data/navbar.dart';
+import '../models/navbar.model.dart';
 
 // Route
 import '../routes/routing.service.dart';
+
+// Navbar
+import 'navbar.app.dart';
 
 void mainNavigateTo(BuildContext context, String route) {
   try {

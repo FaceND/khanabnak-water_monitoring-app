@@ -7,15 +7,15 @@ import 'dart:convert';
 import 'dart:async';
 
 // Model
-import '../models/stationModel.dart';
+import '../models/station.model.dart';
 
 // Data
 import '../data/khanabnak.dart';
 
 // Service
-import '../services/khanabnakService.dart';
-import '../services/storageService.dart';
-import '../services/runUrlService.dart';
+import '../services/khanabnak.service.dart';
+import '../services/storage.service.dart';
+import '../services/runUrl.service.dart';
 
 // Component
 import '../components/navbar.component.dart';

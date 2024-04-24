@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // Model
-import '../models/stationModel.dart';
+import '../models/station.model.dart';
 
 // Data
 import '../data/khanabnak.dart';

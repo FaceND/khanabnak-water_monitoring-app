@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Model
-import '../models/manualModel.dart';
+import '../models/manual.model.dart';
 
 List<Manual> manualList = [
   Manual(

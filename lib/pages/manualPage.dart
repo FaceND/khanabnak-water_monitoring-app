@@ -2,15 +2,15 @@
 import 'package:flutter/material.dart';
 
 // Model
-import '../models/manualModel.dart';
+import '../models/manual.model.dart';
 
 // Component
 import '../components/navbar.component.dart';
 
 class ManualPage extends StatefulWidget {
   final Manual manualData;
-
-  const ManualPage({required this.manualData, Key? key}) : super(key: key);
+  
+  const ManualPage({super.key, required this.manualData});
 
   @override
   State<ManualPage> createState() => _ManualPageState();

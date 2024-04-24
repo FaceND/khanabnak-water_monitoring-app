@@ -2,13 +2,11 @@
 import 'package:flutter/material.dart';
 
 // Model
-import '../models/navbarModel.dart';
+import '../models/navbar.model.dart';
 
-// Data
-import '../data/navbar.dart';
-
-// Service
-import '../services/navbarService.dart';
+// Navbar
+import '../navbar/navbar.app.dart';
+import '../navbar/navbar.service.dart';
 
 AppBar navbar(BuildContext context, {String? title}) {
   return AppBar(

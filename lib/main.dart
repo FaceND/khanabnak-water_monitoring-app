@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'pages/welcomePage.dart';
 
 // Service
-import 'services/storageService.dart';
+import 'services/storage.service.dart';
 
 // Routing
 import 'routes/routing.service.dart';
@@ -16,7 +16,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

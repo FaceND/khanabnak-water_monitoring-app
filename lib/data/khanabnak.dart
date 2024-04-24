@@ -1,5 +1,5 @@
 // Model
-import '../models/stationModel.dart';
+import '../models/station.model.dart';
 
 final List<String> topImagePaths = [
   "assets/images/detailpage/detailpage_slide1.jpg",

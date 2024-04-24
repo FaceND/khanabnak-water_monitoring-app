@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 
 class Navigate {
-  String title;
   String route;
+  String title;
   IconData icon;
 
   Navigate({
-    required this.title,
     required this.route,
+    required this.title,
     required this.icon,
   });
 }

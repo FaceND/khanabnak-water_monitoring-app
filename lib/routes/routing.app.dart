@@ -7,8 +7,8 @@ import '../pages/manualPage.dart';
 import '../pages/errorPage.dart';
 
 // Model
-import '../models/routingModel.dart';
-import '../models/manualModel.dart';
+import '../models/routing.model.dart';
+import '../models/manual.model.dart';
 
 final List<NewRoute> routes = [
   NewRoute(

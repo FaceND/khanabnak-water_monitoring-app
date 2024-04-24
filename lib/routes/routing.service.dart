@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 // Model
-import '../models/routingModel.dart';
+import '../models/routing.model.dart';
 
 // Route
-import 'app.routing.dart';
+import 'routing.app.dart';
 
 String mainPath = getMainRoute().path;
 String errorPath = getErrorRoute().path;
@@ -30,33 +30,4 @@ NewRoute getErrorRoute() {
   return routes.firstWhere(
     (route) => route.path == '/error',
   );
-}
-
-NewRoute findRouteByPath(String path) {
-  return routes.firstWhere((route) => route.path == path);
-}
-
-NewRoute? findNextRouteFromCurrent(BuildContext context) {
-  final currentRoute = ModalRoute.of(context)?.settings.name;
-  if (currentRoute != null) {
-    int indexOfCurrentRoute =
-        routes.indexWhere((route) => route.path == currentRoute);
-    if (indexOfCurrentRoute < 0) {
-      indexOfCurrentRoute = 0;
-    } else if (indexOfCurrentRoute >= routes.length - 1) {
-      return null;
-    }
-    return routes[indexOfCurrentRoute + 1];
-  }
-  return getMainRoute();
-}
-
-NewRoute? findPreviousRouteFromCurrent(BuildContext context) {
-  final currentRoute = ModalRoute.of(context)?.settings.name;
-  if (currentRoute != null) {
-    int indexOfCurrentRoute =
-        routes.lastIndexWhere((route) => route.path == currentRoute);
-    return indexOfCurrentRoute > 0 ? routes[indexOfCurrentRoute - 1] : null;
-  }
-  return null;
 }

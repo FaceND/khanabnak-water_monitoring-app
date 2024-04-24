@@ -9,7 +9,7 @@ import '../data/aboutus.dart';
 import '../components/navbar.component.dart';
 
 class AboutusPage extends StatefulWidget {
-  const AboutusPage({Key? key}) : super(key: key);
+  const AboutusPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _AboutusPageState();

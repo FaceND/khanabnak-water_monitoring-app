@@ -1,5 +1,5 @@
 // Model
-import '../models/cardItemModel.dart';
+import '../models/cardItem.model.dart';
 
 List<CardItem> aboutUsProducts = [
   CardItem(
